@@ -112,8 +112,9 @@ nine required checks on its exact commit, supplied by GitHub Actions. It then ch
 the tag, verifies SCM versioning is active, builds once and validates the source archive
 and wheel. Installed versions and analysis provenance must agree with the selected tag.
 Artifact checks reject unexpected identities, extra packages, instrument-data extensions
-and generated PNG/PDF output. These guards supplement the publication audit; they cannot
-establish that every committed value is invented or cleared for publication.
+and generated PNG/PDF output. The build uses `uv build --no-create-gitignore` so its output
+directory contains only the wheel and source archive. These guards supplement the publication
+audit; they cannot establish that every committed value is invented or cleared for publication.
 
 Only the separate publishing job receives an OIDC token. It downloads the validated
 artifacts without checking out source or rebuilding, then uses the selected index's
