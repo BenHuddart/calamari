@@ -30,7 +30,7 @@ figures and journal styles.
 ## Installation
 
 Calamari is being prepared for its first public release and is tested with Python 3.10–3.13.
-The source repository is currently private. If you have access, install from a checkout:
+Install the development version from a complete Git checkout:
 
 ```bash
 git clone https://github.com/BenHuddart/calamari.git

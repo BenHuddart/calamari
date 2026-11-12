@@ -10,8 +10,8 @@ operation; [method conventions](METHODS.md) define quantities, assumptions and u
 
 ## Install and load
 
-Calamari is being prepared for its first public release. The source repository is currently
-private; if you have access, install from a complete Git checkout with Python 3.10–3.13:
+Calamari is being prepared for its first public release. Install the development version
+from a complete Git checkout with Python 3.10–3.13:
 
 ```bash
 git clone https://github.com/BenHuddart/calamari.git

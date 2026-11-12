@@ -22,10 +22,9 @@ concurrency:
 
 jobs:
   build:
-    # Activation requires a reviewed edit with the clean public repository's numeric ID.
-    # A rename, account connection or repository variable cannot unlock this workflow.
+    # Bind publication to the audited repository; forks and private copies cannot publish.
     if: >-
-      github.repository_id == 'UNCONFIGURED_PUBLIC_REPOSITORY_ID' &&
+      github.repository_id == '1455528470' &&
       !github.event.repository.private && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -110,12 +109,12 @@ jobs:
           path: dist
       - name: Publish to TestPyPI
         if: inputs.target == 'testpypi'
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           repository-url: https://test.pypi.org/legacy/
           packages-dir: dist
       - name: Publish to PyPI
         if: inputs.target == 'pypi'
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           packages-dir: dist
