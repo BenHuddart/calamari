@@ -2,11 +2,13 @@
 
 This is a maintained verification procedure, not a release announcement.
 Builds derive their version from Git using setuptools-scm. The intended
-first public release is 0.5.0, after further polish and explicit maintainer
+first stable release is 0.5.0, after further polish and explicit maintainer
 approval. Citation authorship and the GitHub/Zenodo/PyPI route are recorded in
 [CITATION.cff](https://github.com/BenHuddart/calamari/blob/main/CITATION.cff) and this procedure.
 The intended PyPI distribution is `calamari-magnetometry`; the Python import remains
-`calamari`. No package has been published under this name.
+`calamari`. No package has been published to production PyPI. The
+[0.5.0rc1 candidate on TestPyPI](https://test.pypi.org/project/calamari-magnetometry/0.5.0rc1/)
+is available for publication rehearsal.
 The source repository is public, and documentation is hosted on
 [GitHub Pages](https://benhuddart.github.io/calamari/). Keep README and documentation status
 statements aligned with verified hosting and package availability.
@@ -87,8 +89,8 @@ Shallow checkouts and unidentified raw copies fail explicitly; built source dist
 preserve their version without Git.
 
 Before stable publication, build the actual GitHub archive for the authorised candidate
-tag and require its version to match that tag. This remains a rehearsal gate until an
-actual tag exists; the disposable check demonstrates only local `git archive` behaviour.
+tag and require its version to match that tag. Repeat this check for each candidate;
+the disposable check demonstrates only local `git archive` behaviour.
 
 A real tag must name the reviewed release candidate commit and be created only when the
 maintainer authorises it. The disposable checks create tags only in temporary repositories;
@@ -170,8 +172,8 @@ install runtime dependencies from ordinary PyPI, then install the exact TestPyPI
 `--extra-index-url`. Verify `import calamari`, installed metadata, a synthetic analysis and
 a rebuilt source archive. Download GitHub's source archive for the same authorised tag,
 build it without Git, and require the resulting version to match the tag. The existing
-distribution checks demonstrate the local build
-and installation path; actual index installation remains untested until this rehearsal.
+distribution checks demonstrate the local build and installation path. Repeat the real
+index and archive checks for each candidate; local checks do not exercise an upload.
 
 After candidate verification and final release approval, tag the reviewed commit as `v0.5.0`,
 ensure its required checks are green, and dispatch with `pypi`. Review and approve the
