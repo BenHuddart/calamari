@@ -80,7 +80,7 @@ jobs:
           TARGET: ${{ inputs.target }}
         run: |
           set -euo pipefail
-          uv build --out-dir dist
+          uv build --no-create-gitignore --out-dir dist
           uv tool run --from 'twine>=6' twine check --strict dist/*
           version=$(uv run --no-project python scripts/check-release-artifacts.py dist "$RELEASE_TAG" "$TARGET")
           uv venv "$RUNNER_TEMP/release-env"
