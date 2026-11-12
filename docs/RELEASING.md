@@ -7,8 +7,8 @@ approval. Citation authorship and the GitHub/Zenodo/PyPI route are recorded in
 [CITATION.cff](https://github.com/BenHuddart/calamari/blob/main/CITATION.cff) and this procedure.
 The intended PyPI distribution is `calamari-magnetometry`; the Python import remains
 `calamari`. No package has been published under this name.
-Documentation is hosted on [GitHub Pages](https://benhuddart.github.io/calamari/)
-while the source repository remains private. Keep README and documentation status
+The source repository is public, and documentation is hosted on
+[GitHub Pages](https://benhuddart.github.io/calamari/). Keep README and documentation status
 statements aligned with verified hosting and package availability.
 
 ## Distribution identity
@@ -96,12 +96,15 @@ passing them does not create a release or authorise publication.
 
 ## Prepare PyPI publication
 
-The manually dispatched `publish.yml` workflow is deliberately locked by a literal
-`UNCONFIGURED_PUBLIC_REPOSITORY_ID` check. It cannot build or upload in this repository,
-even after a rename or account connection. Activation requires a reviewed PR replacing
-that placeholder with the clean public repository's numeric ID, after publication
-clearance. Keep the lock until the maintainer explicitly authorises activation.
-No tags, uploads, environment settings or account connections are created by preparation.
+The manually dispatched `publish.yml` workflow is bound to the audited public repository's
+numeric ID, `1455528470`. It can run only from `main` in that public repository; forks and
+private copies cannot publish. The PyPA publisher action is pinned to the reviewed
+v1.14.3 commit. Activation does not authorise a dispatch, tag, upload or release.
+Each rehearsal and stable publication still requires explicit maintainer approval.
+
+The `pypi` and `testpypi` environments require approval from `BenHuddart`, allow the sole
+maintainer to approve their own dispatch, and prohibit administrator bypass. Both restrict
+deployments to the `main` branch. Recheck these settings before each publication.
 
 The workflow accepts a reviewed tag and a destination. It runs from `main`, requires a
 public repository, checks that the tag belongs to `main` history, and verifies the latest
@@ -134,11 +137,23 @@ After the exact snapshot and hosted content pass the publication audit:
    name, `publish.yml` filename and matching environment. No long-lived API token is needed.
    A pending publisher does not reserve a name; recheck before publication.
 5. Review the repository-ID lock change and publisher action revision before enabling the
-   workflow. Confirm the locked workflow is the one reviewed on `main`. Do not dispatch
+   workflow. Confirm the active workflow is the one reviewed on `main`. Do not dispatch
    either destination until its publication has been explicitly authorised.
 
 See the upstream [Trusted Publisher setup](https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/)
 and [GitHub Actions publication guide](https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/).
+
+### Zenodo integration
+
+The public repository is connected to Zenodo through its release webhook. Zenodo reads
+`CITATION.cff` for authorship, affiliation, licence, keywords and the abstract, including
+the development disclosure. No `.zenodo.json` overrides that metadata. Inspect the actual
+record after publication; connecting the repository alone does not validate the imported
+metadata or create a DOI.
+
+For the TestPyPI rehearsal, create only the authorised candidate tag, without publishing
+a GitHub release. The stable GitHub release is a separate, authorised step that triggers
+Zenodo preservation. Do not use a published GitHub release to test the connection.
 
 ### Rehearse, then publish
 
@@ -239,5 +254,5 @@ After a hosting or repository-settings change, verify the Pages environment, wor
 permissions, actual URL, navigation, logos, mathematical rendering and citation links.
 Update source-access statements in the README, user guide, docs landing page and this
 procedure when repository visibility changes. Retain pre-release notices until stable
-installation is verified. Package publishing remains locked until separately authorised
-activation.
+installation is verified. Publishing requires a separately authorised manual dispatch and
+environment approval.
