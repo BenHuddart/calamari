@@ -10,19 +10,14 @@ operation; [method conventions](METHODS.md) define quantities, assumptions and u
 
 ## Install and load
 
-Calamari is being prepared for its first stable release. Install the development version
-from a complete Git checkout with Python 3.10–3.13:
+Calamari is tested with Python 3.10–3.13. Install from PyPI:
 
 ```bash
-git clone https://github.com/BenHuddart/calamari.git
-cd calamari
-python -m pip install .
+python -m pip install calamari-magnetometry
 ```
 
-Include the checkout's Git history and tags so the build can determine its version.
-Untagged checkouts report a development version. Install again after changing revisions
-to refresh the recorded version. GitHub source downloads are supported only for release
-tags.
+For development checkouts, see [Contributing](contributing.md). GitHub source downloads
+are supported only for release tags.
 
 Load an export and inspect its contents before choosing a signal:
 
@@ -197,7 +192,10 @@ Keep the input selection, chosen columns, sample facts, exclusions, aggregation,
 weighting, windows and thresholds with the script. Save resolved result settings and your
 Python/dependency environment, and record `calamari.__version__` or the source revision.
 Result provenance supports this record but does not replace the external inputs and recipe.
-Cite the archived release actually used; see the repository's `CITATION.cff`.
+Cite the archived release actually used. For 0.5.0, use the
+[version-specific Zenodo record](https://doi.org/10.5281/zenodo.24170118);
+[CITATION.cff](https://github.com/BenHuddart/calamari/blob/main/CITATION.cff)
+contains its citation metadata.
 
 ## References
 
