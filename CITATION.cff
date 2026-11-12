@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: >-
+  If you use Calamari, cite this software. For a published analysis, cite the
+  specific archived release used and record its version or source revision.
+type: software
+title: "Calamari: Python tools for analysing SQUID magnetometry data"
+abstract: >-
+  Python tools for analysing SQUID magnetometry data.
+  Calamari loads DC, VSM and AC measurements exported by Quantum Design MPMS 3 SQUID
+  magnetometers. It supports cataloguing and selecting measurements, unit conversion and
+  normalisation, repeat aggregation, model fitting and transition-candidate detection.
+  Plotting tools present measurements and analysis results using matplotlib, with composable
+  figures and journal styles.
+
+  Generative AI tools, including OpenAI Codex and Anthropic's Claude Code, were used
+  extensively to generate and revise code, tests, documentation and development tooling,
+  and to assist with code review. Benjamin M. Huddart directed the scientific requirements
+  and development decisions and retains responsibility for the released software.
+  Validation includes automated tests, independent numerical reference checks and
+  continuous integration.
+
+  Calamari is an independent project and is not affiliated with or endorsed by Quantum Design.
+authors:
+  - family-names: Huddart
+    given-names: Benjamin M.
+    orcid: https://orcid.org/0000-0001-8584-105X
+    affiliation: >-
+      Clarendon Laboratory, Department of Physics, University of Oxford,
+      Parks Road, OX1 3PU, United Kingdom
+repository-code: https://github.com/BenHuddart/calamari
+url: https://github.com/BenHuddart/calamari
+license: MIT
+keywords:
+  - python
+  - magnetometry
+  - magnetism
+  - squid
+  - data-analysis

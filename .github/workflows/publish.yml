@@ -1,0 +1,121 @@
+name: Publish distributions
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Reviewed tag: vX.Y.ZrcN for TestPyPI or vX.Y.Z for PyPI'
+        required: true
+        type: string
+      target:
+        description: Package index
+        required: true
+        type: choice
+        options: [testpypi, pypi]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ inputs.target }}-${{ inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # Activation requires a reviewed edit with the clean public repository's numeric ID.
+    # A rename, account connection or repository variable cannot unlock this workflow.
+    if: >-
+      github.repository_id == 'UNCONFIGURED_PUBLIC_REPOSITORY_ID' &&
+      !github.event.repository.private && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.13'
+      - name: Verify tag and latest required Actions checks
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+          TARGET: ${{ inputs.target }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          uv run --no-project python -c 'import runpy, os; runpy.run_path("scripts/check-release-artifacts.py")["release_version"](os.environ["RELEASE_TAG"], os.environ["TARGET"])'
+          release_sha=$(git rev-parse --verify "refs/tags/$RELEASE_TAG^{commit}")
+          git merge-base --is-ancestor "$release_sha" origin/main
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/commits/$release_sha/check-runs?per_page=100" > "$RUNNER_TEMP/checks.json"
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          required = {'test (3.10)', 'test (3.11)', 'test (3.12)', 'test (3.13)',
+                      'lint', 'docs', 'data policy', 'distributions', 'minimum dependencies'}
+          latest = {}
+          for page in json.loads((Path(os.environ['RUNNER_TEMP']) / 'checks.json').read_text()):
+              for check in page['check_runs']:
+                  name = check['name']
+                  if name in required and (name not in latest or check['id'] > latest[name]['id']):
+                      latest[name] = check
+          if set(latest) != required or any(
+              c['app']['id'] != 15368 or c['conclusion'] != 'success' for c in latest.values()
+          ):
+              raise SystemExit('The selected commit needs all nine successful GitHub Actions checks')
+          PY
+          git checkout --detach "$release_sha"
+          git diff --exit-code HEAD
+          python3 - <<'PY'
+          import tomllib
+          from pathlib import Path
+          project = tomllib.loads(Path('pyproject.toml').read_text())['project']
+          if 'version' in project or 'version' not in project.get('dynamic', []):
+              raise SystemExit('Activate the reviewed SCM versioning configuration before publication')
+          PY
+      - name: Build and validate the artifacts once
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+          TARGET: ${{ inputs.target }}
+        run: |
+          set -euo pipefail
+          uv build --out-dir dist
+          uv tool run --from 'twine>=6' twine check --strict dist/*
+          version=$(uv run --no-project python scripts/check-release-artifacts.py dist "$RELEASE_TAG" "$TARGET")
+          uv venv "$RUNNER_TEMP/release-env"
+          uv pip install --python "$RUNNER_TEMP/release-env/bin/python" dist/*.whl
+          "$RUNNER_TEMP/release-env/bin/python" -I -c 'import calamari, importlib.metadata as m, sys; from calamari._provenance import calamari_version; assert calamari.__version__ == calamari_version() == m.version("calamari-magnetometry") == sys.argv[1]' "$version"
+          sha256sum dist/*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-distributions
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.target }}
+    permissions:
+      id-token: write
+    steps:
+      # No checkout or build here: upload the exact artifacts validated above.
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-distributions
+          path: dist
+      - name: Publish to TestPyPI
+        if: inputs.target == 'testpypi'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: dist
+      - name: Publish to PyPI
+        if: inputs.target == 'pypi'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist

@@ -1,0 +1,117 @@
+[build-system]
+# setuptools-scm >=9.0.3 supports explicit shallow-history rejection.
+requires = ["setuptools>=80", "setuptools-scm>=9.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "calamari-magnetometry"
+dynamic = ["version"]
+description = "Python tools for analysing SQUID magnetometry data."
+keywords = ["python", "magnetometry", "magnetism", "squid", "data-analysis"]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Benjamin M. Huddart" }]
+requires-python = ">=3.10"
+dependencies = [
+    # Exact direct-runtime floors are exercised by the minimum-dependencies CI job.
+    # NumPy 1.24 emits invalid-cast warnings during CSV export with missing values.
+    "numpy>=1.25",
+    "scipy>=1.10",   # savgol_filter, find_peaks (calamari.transitions)
+    # 2.0/2.1 fail when rounding nullable booleans in phase-diagram tables;
+    # 2.2.0 also emits an import-time PyArrow deprecation warning. Tested at 2.2.3.
+    "pandas>=2.2.3",
+    "iminuit>=2.24", # fitting backend (calamari.fitting)
+    # Sole plotting backend (PL-1). 3.10.0 emits pyparsing 3.3 deprecations
+    # during plotting; 3.10.8 is the tested compatible floor.
+    "matplotlib>=3.10.8",
+]
+
+[project.urls]
+Documentation = "https://benhuddart.github.io/calamari/"
+Changelog = "https://github.com/BenHuddart/calamari/blob/main/CHANGELOG.md"
+Repository = "https://github.com/BenHuddart/calamari"
+Issues = "https://github.com/BenHuddart/calamari/issues"
+
+# PEP 735 dependency groups (not optional-dependencies): these are
+# developer/build tooling, not installable extras, and Read the Docs'
+# uv-based install path (`uv sync --group docs`) expects them here.
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "coverage>=7.10",  # source line/branch gate; retain Python 3.10 compatibility
+    "pytest-doctestplus>=1.2",  # doctests over src/ (FLOAT_CMP et al.)
+    "ruff>=0.4",
+]
+docs = [
+    # Floors are the versions exercised in development, per the runtime
+    # convention above. Sphinx must be >=8.1 specifically: conf.py's
+    # ``copyright = "%Y, ..."`` relies on the %Y substitution added in 8.1.
+    "sphinx>=8.1",
+    "sphinxcontrib-bibtex>=2.6",
+    "myst-parser>=4",             # user guides are MyST Markdown
+    "pydata-sphinx-theme>=0.16",
+    "sphinx-copybutton>=0.5",
+    "sphinx-autodoc-typehints>=3",
+    "sphinx-autobuild>=2024.10",  # live-reload local preview
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]
+version_file = "src/calamari/_version.py"
+
+[tool.setuptools_scm.scm.git]
+pre_parse = "fail_on_shallow"
+
+[tool.uv]
+# SCM metadata changes when commits or tags change, even without a TOML edit.
+cache-keys = [
+    { file = "pyproject.toml" },
+    { file = "README.md" },
+    { git = { commit = true, tags = true } },
+]
+
+[tool.coverage.run]
+branch = true
+source = ["calamari"]
+
+[tool.coverage.report]
+fail_under = 90
+precision = 2
+show_missing = true
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# Physics notation is deliberately preserved against PEP8 (house
+# convention shared with asymmetry): mu_B, H, T, chi, C, J as symbols.
+"src/calamari/fitting/models.py" = ["N803", "N806"]  # C, J, T_K, M_s parameter names
+"src/calamari/sample.py" = ["N802"]                  # *_muB_* method names
+"src/calamari/constants.py" = ["N816"]               # mixed-case constant names (mu_B)
+"src/calamari/measurement.py" = ["N803"]             # t_tol_K, h_tol_Oe scan-tolerance params (physics notation)
+"src/calamari/catalog.py" = ["N803"]                 # T_K, H_Oe, t_tol_K, h_tol_Oe setpoint params on Catalog.at (physics notation)
+"src/calamari/repeats.py" = ["N803"]                 # t_tol_K, h_tol_Oe repeat-tolerance params (physics notation)
+"src/calamari/simulate.py" = ["N803", "N806"]        # T_K, C, theta_K, temperature_K synthetic-signal names
+"tests/conftest.py" = ["N806", "N815"]               # temperature_K fixture/field names (physics notation)
+"tests/test_simulate.py" = ["N806"]                  # T_K local variable names (physics notation)
+"tests/test_fitting.py" = ["N802", "N803", "N806"]   # C, J, T, H, M_s physics symbols + test_*_Ms names
+"tests/plot/conftest.py" = ["E402"]                # select Agg before importing pyplot
+"tests/plot/*.py" = ["N802", "N806"]              # temperature_K + test_*_muB_per_* names (physics notation)
+"tests/test_sample.py" = ["N806"]                    # C, T Curie-Weiss symbols (physics notation)
+"tests/test_sweeps.py" = ["N806"]                    # temperature_K synthetic-signal names (physics notation)
+"tests/transitions/*.py" = ["N806"]               # temperature_K synthetic-signal names (physics notation)
+"tests/test_quality.py" = ["N802", "N803", "N806"]   # T, H setpoints and _chi_of_T/_chi_of_H signal shapes (physics notation)
+"tests/test_boundary.py" = ["N803"]                  # T0_K, Hc_T, H0_T, Tc_K boundary-model parameter names (physics notation)
+
+[tool.pytest.ini_options]
+# Quiet by default: keeps CI/agent transcripts small.
+addopts = "-q"
+testpaths = ["tests"]

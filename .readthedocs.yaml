@@ -1,0 +1,30 @@
+# Optional Read the Docs configuration for a future host connection.
+# GitHub Pages is the current deployment target; this file does not deploy it.
+version: 2
+
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.13"
+  jobs:
+    post_checkout:
+      - |
+        if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+          git fetch --unshallow
+        fi
+      - git fetch --tags
+    create_environment:
+      - asdf plugin add uv
+      # Pinned (version exercised in development, as with dependency
+      # floors) so a new uv release cannot break the docs build without
+      # a repo change; bump deliberately.
+      - asdf install uv 0.12.6
+      - asdf global uv 0.12.6
+      - uv venv
+    install:
+      - uv sync --group docs
+    build:
+      html:
+        # The same strict flags as the docs CI job and AGENTS.md -- the
+        # published build must not be laxer than the merge gate.
+        - uv run sphinx-build -n -W --keep-going -b html docs $READTHEDOCS_OUTPUT/html

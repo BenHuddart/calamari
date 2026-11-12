@@ -1,0 +1,18 @@
+include CONTRIBUTING.md
+include CHANGELOG.md
+include CITATION.cff
+include scripts/check-doc-site.py
+include scripts/check-distributions.sh
+include scripts/check-minimum-dependencies.sh
+include scripts/check-versioning.py
+include scripts/check-release-artifacts.py
+recursive-include tests *.py
+recursive-include docs *.md *.py *.rst *.bib
+recursive-include docs/_static *.svg *.css
+recursive-include docs/_templates *.html
+prune docs/_build
+prune docs/api
+global-exclude __pycache__ *.py[cod]
+
+exclude .git_archival.txt
+exclude .gitattributes
