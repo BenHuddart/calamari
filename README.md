@@ -9,6 +9,8 @@
 
 **Python tools for analysing SQUID magnetometry data.**
 
+[![Zenodo DOI][zenodo-badge]][release-doi]
+
 Calamari loads DC, VSM and AC measurements exported by Quantum Design MPMS 3 SQUID
 magnetometers. It supports cataloguing and selecting measurements, unit conversion and
 normalisation, repeat aggregation, model fitting and transition-candidate detection.
@@ -29,17 +31,15 @@ figures and journal styles.
 
 ## Installation
 
-Calamari is tested with Python 3.10–3.13. Install from a complete Git checkout:
+Calamari is tested with Python 3.10–3.13. Install from PyPI:
 
 ```bash
-git clone https://github.com/BenHuddart/calamari.git
-cd calamari
-python -m pip install .
+python -m pip install calamari-magnetometry
 ```
 
-Use a complete Git checkout with its tags. Builds derive the version from Git; untagged
-checkouts report a development version. Install again after changing revisions to refresh
-the recorded version. Use GitHub source downloads only for release tags.
+For development, use a complete Git checkout with its tags; see
+[Contributing](https://github.com/BenHuddart/calamari/blob/main/CONTRIBUTING.md).
+GitHub source downloads are supported only for release tags.
 
 ## Getting started
 
@@ -68,8 +68,10 @@ continuous integration.
 
 ## Citation and support
 
-If you use Calamari in research, use the citation metadata in [CITATION.cff](https://github.com/BenHuddart/calamari/blob/main/CITATION.cff)
-and record the software version or commit with your analysis.
+If you use Calamari 0.5.0 in research, cite [the archived release][release-doi] and record
+the software version or commit with your analysis. Citation metadata are available in
+[CITATION.cff](https://github.com/BenHuddart/calamari/blob/main/CITATION.cff).
+For other versions, cite the corresponding archive.
 
 [Report a problem or request a feature](https://github.com/BenHuddart/calamari/issues).
 Calamari is available under the [MIT licence](https://github.com/BenHuddart/calamari/blob/main/LICENSE).
@@ -77,3 +79,6 @@ Calamari is available under the [MIT licence](https://github.com/BenHuddart/cala
 Contributions are welcome; see [Contributing](https://github.com/BenHuddart/calamari/blob/main/CONTRIBUTING.md).
 
 Calamari is an independent project and is not affiliated with or endorsed by Quantum Design.
+
+[zenodo-badge]: https://zenodo.org/badge/DOI/10.5281/zenodo.24170118.svg
+[release-doi]: https://doi.org/10.5281/zenodo.24170118

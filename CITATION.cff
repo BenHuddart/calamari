@@ -4,6 +4,8 @@ message: >-
   specific archived release used and record its version or source revision.
 type: software
 version: 0.5.0
+date-released: '2026-11-12'
+doi: 10.5281/zenodo.24170118
 title: "Calamari: Python tools for analysing SQUID magnetometry data"
 abstract: >-
   Python tools for analysing SQUID magnetometry data.

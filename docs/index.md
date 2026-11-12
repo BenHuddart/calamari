@@ -2,11 +2,6 @@
 
 **Python tools for analysing SQUID magnetometry data.**
 
-```{note}
-This is pre-release documentation. Install the development version from a Git checkout
-as described in the [user guide](USER_GUIDE.md#install-and-load).
-```
-
 Calamari loads DC, VSM and AC measurements exported by Quantum Design MPMS 3 SQUID
 magnetometers. It supports cataloguing and selecting measurements, unit conversion and
 normalisation, repeat aggregation, model fitting and transition-candidate detection.
@@ -15,6 +10,10 @@ figures and journal styles.
 
 Start with the [user guide](USER_GUIDE.md). The [API reference](api.md) documents the
 available operations and their [method conventions](METHODS.md).
+
+[Release 0.5.0](https://github.com/BenHuddart/calamari/releases/tag/v0.5.0) is available
+on [PyPI](https://pypi.org/project/calamari-magnetometry/) and archived on
+[Zenodo](https://doi.org/10.5281/zenodo.24170118).
 
 ```{toctree}
 :maxdepth: 1

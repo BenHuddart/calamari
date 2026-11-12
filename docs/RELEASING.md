@@ -1,26 +1,26 @@
 # Release verification
 
-This is a maintained verification procedure, not a release announcement.
-Builds derive their version from Git using setuptools-scm. The intended
-first stable release is 0.5.0, after further polish and explicit maintainer
-approval. Citation authorship and the GitHub/Zenodo/PyPI route are recorded in
-[CITATION.cff](https://github.com/BenHuddart/calamari/blob/main/CITATION.cff) and this procedure.
-The intended PyPI distribution is `calamari-magnetometry`; the Python import remains
-`calamari`. No package has been published to production PyPI. The
-[0.5.0rc1 candidate on TestPyPI](https://test.pypi.org/project/calamari-magnetometry/0.5.0rc1/)
-is available for publication rehearsal.
+This is the maintained release verification procedure. Builds derive their version from
+Git using setuptools-scm. Calamari 0.5.0 was published on 12 November 2026 on
+[PyPI](https://pypi.org/project/calamari-magnetometry/0.5.0/),
+[GitHub](https://github.com/BenHuddart/calamari/releases/tag/v0.5.0) and
+[Zenodo](https://doi.org/10.5281/zenodo.24170118). Its version-specific DOI is
+`10.5281/zenodo.24170118`; the all-versions DOI is `10.5281/zenodo.24170117`.
+Cite the version-specific record for an analysis using 0.5.0.
+
+Citation authorship and release metadata are recorded in
+[CITATION.cff](https://github.com/BenHuddart/calamari/blob/main/CITATION.cff).
 The source repository is public, and documentation is hosted on
-[GitHub Pages](https://benhuddart.github.io/calamari/). Keep README and documentation status
-statements aligned with verified hosting and package availability.
+[GitHub Pages](https://benhuddart.github.io/calamari/). Keep these status statements aligned
+with verified hosting and package availability.
 
 ## Distribution identity
 
 Built metadata uses `calamari-magnetometry` (normalised to `calamari_magnetometry` in
 archive filenames). Runtime versions, analysis records and Sphinx read that distribution's
-metadata; users continue to write `import calamari`. Installation instructions currently
-use a checkout. After verified publication, update them to
-`python -m pip install calamari-magnetometry`. Do not advertise an unpublished package
-as installable.
+metadata; users continue to write `import calamari`. The production installation command is
+`python -m pip install calamari-magnetometry`. Update installation instructions only after
+verifying publication on the intended index.
 
 The `distributions` check rebuilds a wheel from the source archive, checks both with
 `twine check --strict`, and exercises the installed package outside the checkout.
