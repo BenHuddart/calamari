@@ -29,8 +29,7 @@ figures and journal styles.
 
 ## Installation
 
-Calamari is being prepared for its first stable release and is tested with Python 3.10–3.13.
-Install the development version from a complete Git checkout:
+Calamari is tested with Python 3.10–3.13. Install from a complete Git checkout:
 
 ```bash
 git clone https://github.com/BenHuddart/calamari.git

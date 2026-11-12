@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.5.0
 
-Planned first public release: 0.5.0.
+Initial release.
 
 ### Included in the initial release
 

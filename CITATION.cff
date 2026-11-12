@@ -3,6 +3,7 @@ message: >-
   If you use Calamari, cite this software. For a published analysis, cite the
   specific archived release used and record its version or source revision.
 type: software
+version: 0.5.0
 title: "Calamari: Python tools for analysing SQUID magnetometry data"
 abstract: >-
   Python tools for analysing SQUID magnetometry data.
