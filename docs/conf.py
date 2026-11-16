@@ -125,6 +125,23 @@ intersphinx_mapping = {
     "iminuit": ("https://scikit-hep.org/iminuit/", None),
 }
 
+# -- External link checking --------------------------------------------
+# These DOI redirects returned publisher HTTP 403 responses (issue #11).
+# Excluded URLs are skipped, not validated; keep other DOI links checked.
+linkcheck_ignore = [
+    r"^https://doi\.org/10\.1002/sim\.1545$",
+    r"^https://doi\.org/10\.1021/ac60214a047$",
+    r"^https://doi\.org/10\.1080/14786436208213705$",
+    r"^https://doi\.org/10\.1093/biomet/56\.3\.495$",
+    r"^https://doi\.org/10\.1093/biomet/74\.1\.33$",
+    r"^https://doi\.org/10\.1198/016214505000001177$",
+]
+# Linkcheck reported an existing GitHub README anchor as missing (issue #11).
+# Skip anchors only on this page; still check that the page is reachable.
+linkcheck_anchors_ignore_for_url = [
+    r"^https://github\.com/BenHuddart/calamari/blob/main/README\.md$",
+]
+
 # -- MyST ---------------------------------------------------------------
 # The user guides deep-link to their own section headings; auto-generate
 # anchors so those links survive the move onto the site.
